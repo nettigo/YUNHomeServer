@@ -90,7 +90,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function (req, res, next){
 	var user = auth(req);
 
-	if (!user || (user.name != 'root' && user.pass != 'arduinoqwe'))
+	if (!user || (user.name != 'root' || user.pass != 'ntg arduino'))
 	{
 		res.set('WWW-Authenticate', 'Basic realm="Zaloguj się"');
 		return res.status(401).end();
