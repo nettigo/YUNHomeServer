@@ -13,7 +13,7 @@ void setup() {
   Bridge.begin();
   
   node.begin("node");
-  node.addParameter("/mnt/sda1/arduino/pompa/pompa.js");
+  node.addParameter("/mnt/sda1/arduino/YUNHomeServer/YHS.js");
   node.runAsynchronously();
   
   setupRadio();
