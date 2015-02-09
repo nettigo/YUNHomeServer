@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link href="index.css" rel="stylesheet" media="screen">
+	<title>Pompa</title>
+</head>
+<body onload="init()">
+	<div class="content">
+		<div class="program-name">
+			<h1>Pompa CWU</h1>
+		</div>
+
+		<div id="message" class="close">Nie mogę połączyć się z pompą :(</div>
+
+		<div class="range">
+			<input type="range" id="time-range" value="30" min="0" max="120"/>
+		</div>
+
+		<div class="time-label">Czas działania: <span>30</span> minut</div>
+		<div class="time-elapsed hide">Czas czas do wyłączenia: <span>0</span> minut</div>
+
+		<div class="button">
+			<input type="button" value="Włącz" class="on"/>
+		</div>
+	</div>
+
+<script type="text/javascript" src="index.js"></script>
+</body>
+</html>
