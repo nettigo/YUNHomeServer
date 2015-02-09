@@ -1,6 +1,6 @@
 #include <RCSwitch.h>
 
-#define RADIO_PIN  2
+#define RADIO_PIN  10
 
 RCSwitch mySwitch = RCSwitch();
 
