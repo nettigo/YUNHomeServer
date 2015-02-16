@@ -1,5 +1,9 @@
 #YUN Home Server
 
+Jeżeli potrzebujesz sterować urządzeniami przez Internet - mamy gotowy zestaw oparty o [Arduino YUN i gniazdka 
+bezprzewodowe](https://nettigo.pl/products/zestaw-startowy-arduino-yun-domowa-automatyka). Z myślą o tym zestawie
+opracowany został YHS, jednak nie ma przeszkód by używać go w innych konfiguracjach, np z [Raspberry Pi](https://nettigo.pl/products/raspberry-pi-2-model-b)
+
 YHS składa się z dwóch podstawowych elementów:
 
 * szkicu dla Arduino YUN
