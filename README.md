@@ -10,7 +10,7 @@ Szkic odpowiada za komunikację radiową z gniazdkami (zajrzyj do `YUNHomeServer
 Node.JS. Czyli też np na Raspberry Pi.
 
 W tej chwili YHS.js uruchomiony zwraca polecenia 'on' i 'off' przez linię komend, więc prosty skrypt w Pythonie, który 
-kontroluje [modeł przekaźnika - Nettigo Relay](https://nettigo.pl/products/modul-przekaznika-dla-arduino-lub-raspberry-pi)
+kontroluje [moduł przekaźnika - Nettigo Relay](https://nettigo.pl/products/modul-przekaznika-dla-arduino-lub-raspberry-pi)
 podłączony do GPIO nr 4 wyglądać może tak:
 
 	import os
