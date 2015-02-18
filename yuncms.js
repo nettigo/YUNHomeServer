@@ -30,6 +30,10 @@ app.get('/', function (req, res) {
 
 app.get('/:device', function (req, res) {
   var device = req.params.device;
+  if (undefined==config[device]) {
+    res.send('NaN');
+    return
+  }
   var state = config[device].state;
   res.send(state);
 });

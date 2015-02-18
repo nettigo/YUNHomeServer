@@ -16,10 +16,11 @@ void setupPump(){
 
 void setup() {
   Bridge.begin();
+  Console.begin();
 
   setupPump();  
   node.begin("node");
-  node.addParameter("/mnt/sda1/arduino/YUNHomeServer/no-run-yuncms.js");
+  node.addParameter("/mnt/sda1/arduino/YUNHomeServer/yuncms.js");
   node.runAsynchronously();
   
   setupRadio();
@@ -39,15 +40,19 @@ void commandDecoder()
   if (node.available())
   {
     String index = node.readStringUntil(' ');
+    Console.print(F("index:"));
+    Console.println(index);
     String command = node.readStringUntil('\n');
+    Console.print(F("command:"));
+    Console.println(command);
     byte idx = index.toInt();
     if (idx >= MAX_DEVICES) { return; }
-    if (command == F("on"))
+    if (command == F("true"))
     {
       pumpState[idx] = PUMP_ON;
     }
     
-    else if (command == F("off"))
+    else if (command == F("false"))
     {
       pumpState[idx] = PUMP_OFF;
     }
