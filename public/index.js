@@ -1,8 +1,8 @@
 var message = document.querySelector('#message');
-var timeRange = document.querySelector('#time-range');
-var timeLabel = document.querySelector('.time-label span');
-var timeElapsed = document.querySelector('.time-elapsed span');
-var button = document.querySelector('.button input');
+//var timeRange = document.querySelector('#time-range');
+//var timeLabel = document.querySelector('.time-label span');
+//var timeElapsed = document.querySelector('.time-elapsed span');
+//var button = document.querySelector('.button input');
 
 function showMessage()
 {
@@ -23,7 +23,7 @@ function setTime(time)
 
 function getTime()
 {
-	return parseInt(timeRange.value);
+	// return parseInt(timeRange.value);
 }
 
 function setTimeElapsed(time)
@@ -43,14 +43,16 @@ function hideTimeElapsed()
 		timeElapsed.parentElement.classList.add('hide');
 }
 
-function setButtonModeOff()
+function setButtonModeOff(id)
 {
+	button = document.querySelector('#btn-'+id + '> input');
 	button.value = 'Wyłącz';
 	button.className = 'off';
 }
 
-function setButtonModeOn()
+function setButtonModeOn(id)
 {
+	button = document.querySelector('#btn-'+id+ '> input');
 	button.value = 'Włącz';
 	button.className = 'on';
 }
@@ -67,41 +69,53 @@ function setModePumpOff()
 	hideTimeElapsed();
 }
 
-function turnPumpOn(time, response)
+ function toggleButton(id) {
+ 	button = document.querySelector('#btn-'+id+ '> input');
+ 	disabled = button.classList.contains('off')
+ 	if (disabled) {
+ 		setButtonModeOn(id)
+ 		turnDeviceOn(id, 0)
+ 	} else {
+ 		setButtonModeOff(id)
+ 		turnDeviceOff(id)
+ 	}
+ }
+
+function turnDeviceOn(device, time, response)
 {
 	var xhr = new XMLHttpRequest();
-	var url = '/pump/start/' + time;
-	xhr.open('GET', url, true);
+	xhr.open('GET', '/'+device+'/true', true);
+	//xhr.open('GET', url, true);
 	xhr.onload = function (e) {
 		if (this.status == 200)
 		{
 			var status = JSON.parse(this.responseText);
-			response(status, false);
+			//response(status, false);
 		}
 
 		else
 		{
-			response(null, true);
+			// response(null, true);
 		}
 	}
 
 	xhr.send();
 }
 
-function turnPumpOff(response)
+function turnDeviceOff(device,response)
 {
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', '/pump/stop', true);
+	xhr.open('GET', '/'+device+'/false', true);
 	xhr.onload = function (e) {
 		if (this.status == 200)
 		{
 			var status = JSON.parse(this.responseText);
-			response(status, false);
+			//response(status, false);
 		}
 
 		else
 		{
-			response(null, true);
+			//response(null, true);
 		}
 	}
 
@@ -173,21 +187,24 @@ function togglePumpStatus()
 	}
 }
 
-function init() {
+function init(arg) {
+	//arg.forEach(function(k){alert (k)})
+/*
 	getPumpStatus(updateStatus);
 	setInterval(function () {
 		getPumpStatus(updateStatus);
 	}, 1000);
+*/
 }
 
-timeRange.onchange = function () {
-	setTime(getTime());
-};
+// timeRange.onchange = function () {
+// 	setTime(getTime());
+// };
 
-timeRange.oninput = function () {
-	setTime(getTime());
-};
+// timeRange.oninput = function () {
+// 	setTime(getTime());
+// };
 
-button.onclick = function () {
-	togglePumpStatus();
-};
+// button.onclick = function () {
+// 	togglePumpStatus();
+// };

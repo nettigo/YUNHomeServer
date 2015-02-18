@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
+
 	<meta charset="UTF-8">
 	<link href="index.css" rel="stylesheet" media="screen">
 	<title>Pompa X</title>
 </head>
-<body onload="init()">
-	{% for stage in sections %}
-	<div class="content">
+<body onload="init([<%Object.keys(devices).forEach(function(k){%>'<%=k%>',<%})%>])">	
+ <% for (var device in devices) { %>
+	<div id="device-<%= devices[device].msg%>" class="content">
 		<div class="program-name">
-			<h1>{{ stage["descr"] }}</h1>
+			<h1><%= devices[device].name%></h1>
 		</div>
 
 		<div id="message" class="close">Nie mogę połączyć się z pompą :(</div>
 
+<!--
 		<div class="range">
 			<input type="range" id="time-range" value="30" min="0" max="120"/>
 		</div>
-
 		<div class="time-label">Czas działania: <span>30</span> minut</div>
 		<div class="time-elapsed hide">Czas do wyłączenia: <span>0</span> minut</div>
-
-		<div class="button">
-			<input type="button" value="Włącz" class="on"/>
+-->
+		<div id="btn-<%=device%>" class="button">
+			<input type="button" value="Włącz" class="on" onclick="toggleButton('<%=device%>')" />
 		</div>
 	</div>
-	{% endfor %}
+	<% } %>
 
 <script type="text/javascript" src="index.js"></script>
 </body>
