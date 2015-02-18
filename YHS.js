@@ -10,6 +10,13 @@ var isPumpWork = false
 var pumpStartTime;
 var pumpWorkTime;
 
+var swig = require('swig');
+var nconf = require('nconf');
+
+nconf.use('file', { file: './config.json' });
+nconf.load();
+
+
 var pump = {
 	start: function () {
 		process.stdout.write('on\n');
@@ -129,6 +136,10 @@ app.get('/pump/stop', function (req, res){
 	stop();
 	res.send(getPumpState_JSON());
 });
+
+app.get('/',function(req, res){
+swig.renderFile('./templates/index.html', {});
+})
 
 // SSL Config
 var options = {
