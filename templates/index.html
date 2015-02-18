@@ -3,12 +3,13 @@
 <head>
 	<meta charset="UTF-8">
 	<link href="index.css" rel="stylesheet" media="screen">
-	<title>Pompa</title>
+	<title>Pompa X</title>
 </head>
 <body onload="init()">
+	{% for stage in sections %}
 	<div class="content">
 		<div class="program-name">
-			<h1>Pompa CWU</h1>
+			<h1>{{ stage["descr"] }}</h1>
 		</div>
 
 		<div id="message" class="close">Nie mogę połączyć się z pompą :(</div>
@@ -24,6 +25,7 @@
 			<input type="button" value="Włącz" class="on"/>
 		</div>
 	</div>
+	{% endfor %}
 
 <script type="text/javascript" src="index.js"></script>
 </body>

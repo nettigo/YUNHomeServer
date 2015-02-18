@@ -11,6 +11,7 @@ var pumpStartTime;
 var pumpWorkTime;
 
 var swig = require('swig');
+var cons = require('consolidate');
 var nconf = require('nconf');
 
 nconf.use('file', { file: './config.json' });
@@ -137,8 +138,13 @@ app.get('/pump/stop', function (req, res){
 	res.send(getPumpState_JSON());
 });
 
-app.get('/',function(req, res){
-swig.renderFile('./templates/index.html', {});
+app.get('/t', function(req, res){
+	cons.swig('./templates/index.html', {"sections":nconf.get("interface")}, 
+		function(err, html){
+			if (err) throw err;
+			res.send(html);
+			}
+		);
 })
 
 // SSL Config

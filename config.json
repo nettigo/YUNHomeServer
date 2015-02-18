@@ -1,6 +1,13 @@
 {
+ "interface":{
   "outlet_1": {
     "id": 1,
     "descr": "Pompa CWU"
+  },
+  "outlet_2": {
+    "id": 2,
+    "descr": "Pompa CO"
   }
+
+}
 }
