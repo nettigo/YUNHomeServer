@@ -72,12 +72,13 @@ function setModePumpOff()
  function toggleButton(id) {
  	button = document.querySelector('#btn-'+id+ '> input');
  	disabled = button.classList.contains('off')
+ 	//wyłączone? to ustaw przycisk w 'do włączenia' a urządzenie wyłącz
  	if (disabled) {
  		setButtonModeOn(id)
- 		turnDeviceOn(id, 0)
+ 		turnDeviceOff(id, 0)
  	} else {
  		setButtonModeOff(id)
- 		turnDeviceOff(id)
+ 		turnDeviceOn(id)
  	}
  }
 
@@ -149,7 +150,7 @@ function getDeviceStatus(device, response)
 }
 
 var pumpStatus;
-
+//Jeżeli urządzenie jest włączone to zmień przycisk na 'do wyłączenia'
 function updateStatus(device, status, error)
 {
 	if (error)
@@ -160,9 +161,9 @@ function updateStatus(device, status, error)
 
 
 	if (status) {
-		setButtonModeOn(device)
-	} else {
 		setButtonModeOff(device)
+	} else {
+		setButtonModeOn(device)
 	}
 
 }
