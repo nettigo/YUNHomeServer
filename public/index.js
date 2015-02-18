@@ -122,20 +122,22 @@ function turnDeviceOff(device,response)
 	xhr.send();
 }
 
-function getPumpStatus(response)
+function getDeviceStatus(device, response)
 {
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', '/pump', true);
+	xhr.open('GET', '/'+device, true);
 	xhr.onload = function (e) {
 		if (this.status == 200)
 		{
 			var status = JSON.parse(this.responseText);
-			response(status, false);
+			response(device, status, false);
+
 		}
 
 		else
 		{
-			response(null, true);
+			//response(null, true);
+			//TODO - obłsuga braku połączenia
 		}
 	};
 
@@ -148,23 +150,21 @@ function getPumpStatus(response)
 
 var pumpStatus;
 
-function updateStatus(status, error)
+function updateStatus(device, status, error)
 {
 	if (error)
 	{
-		showMessage();
+//		showMessage();
 		return;
 	}
 
-	hideMessage();
-	pumpStatus = status;
-	if (status.isPumpOn)
-		setModePumpOn();
 
-	else
-		setModePumpOff();
+	if (status) {
+		setButtonModeOn(device)
+	} else {
+		setButtonModeOff(device)
+	}
 
-	setTimeElapsed(status.timeToStop);
 }
 
 function togglePumpStatus()
@@ -188,7 +188,9 @@ function togglePumpStatus()
 }
 
 function init(arg) {
-	//arg.forEach(function(k){alert (k)})
+	arg.forEach(function(k){
+		getDeviceStatus(k,updateStatus)
+	})
 /*
 	getPumpStatus(updateStatus);
 	setInterval(function () {
@@ -196,15 +198,3 @@ function init(arg) {
 	}, 1000);
 */
 }
-
-// timeRange.onchange = function () {
-// 	setTime(getTime());
-// };
-
-// timeRange.oninput = function () {
-// 	setTime(getTime());
-// };
-
-// button.onclick = function () {
-// 	togglePumpStatus();
-// };
