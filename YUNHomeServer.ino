@@ -3,17 +3,23 @@
 
 #define PUMP_ON true
 #define PUMP_OFF false
-
+#define MAX_DEVICES  4
 Process node;
 
-bool pumpState = PUMP_OFF;
+bool pumpState[MAX_DEVICES];
+
 unsigned long timeLast = millis();
+
+void setupPump(){
+  for (int i=0;i<MAX_DEVICES;i++) { pumpState[i] = PUMP_OFF;}
+}
 
 void setup() {
   Bridge.begin();
-  
+
+  setupPump();  
   node.begin("node");
-  node.addParameter("/mnt/sda1/arduino/YUNHomeServer/YHS.js");
+  node.addParameter("/mnt/sda1/arduino/YUNHomeServer/no-run-yuncms.js");
   node.runAsynchronously();
   
   setupRadio();
@@ -32,15 +38,18 @@ void commandDecoder()
 {
   if (node.available())
   {
+    String index = node.readStringUntil(' ');
     String command = node.readStringUntil('\n');
+    byte idx = index.toInt();
+    if (idx >= MAX_DEVICES) { return; }
     if (command == F("on"))
     {
-      pumpState = PUMP_ON;
+      pumpState[idx] = PUMP_ON;
     }
     
     else if (command == F("off"))
     {
-      pumpState = PUMP_OFF;
+      pumpState[idx] = PUMP_OFF;
     }
   }
 }
@@ -60,13 +69,14 @@ bool timerProcess()
 
 void pumpControl()
 {
-  if (pumpState == PUMP_ON)
-  {
-    sendCommand(PUMP_ON);
-  }
-  
-  else
-  {
-    sendCommand(PUMP_OFF);
+  for (byte i = 0; i< MAX_DEVICES; i++) {
+    if (pumpState[i] == PUMP_ON)
+    {
+      sendCommand(i,PUMP_ON);
+    }
+    else
+    {
+      sendCommand(i,PUMP_OFF);
+    }
   }
 }

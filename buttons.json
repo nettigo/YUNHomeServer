@@ -1,14 +1,14 @@
 {
-  "swiatlo": {
-    "name": "Światło",
+  "cwu": {
+    "name": "Pompa CWU",
     "state": false,
-    "msg": "2"
+    "msg": "1"
   },
 
-  "lampa": {
-    "name": "Lampka",
+  "co": {
+    "name": "Pompa CO",
     "state": false,
-    "msg": "3"
+    "msg": "2"
   },
 
   "telewizor": {

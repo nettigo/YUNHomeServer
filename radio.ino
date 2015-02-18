@@ -2,6 +2,8 @@
 
 #define RADIO_PIN  10
 
+
+
 RCSwitch mySwitch = RCSwitch();
 
 void setupRadio(){
@@ -10,10 +12,27 @@ void setupRadio(){
   mySwitch.enableTransmit(RADIO_PIN); 
 }
 
-void sendCommand(bool pumpStatus) {
+void sendCommand(byte index, bool pumpStatus) {
   if (PUMP_ON == pumpStatus) {
-    mySwitch.send("010100000100010101010011");
+    switch(index) {
+      case 1:
+        mySwitch.send("010100000100010101010011");
+        break;
+      case 2:
+        mySwitch.send("010100000101000101010011");
+        break;
+    }
+
   } else {
-    mySwitch.send("010100000100010101011100");
+    switch(index) {
+        case 1:
+        mySwitch.send("010100000100010101011100");
+        break;
+      case 2:
+        mySwitch.send("010100000101000101011100");
+        break;
+    }
+
+
   }
 }
