@@ -14,9 +14,6 @@ function readConfig()
 
   return config;
 }
-// Static files in /
-app.use(express.static(path.join(__dirname, 'public')));
-
 
 var config = readConfig();
 
@@ -30,10 +27,6 @@ app.get('/', function (req, res) {
 
 app.get('/:device', function (req, res) {
   var device = req.params.device;
-  if (undefined==config[device]) {
-    res.send('NaN');
-    return
-  }
   var state = config[device].state;
   res.send(state);
 });
@@ -44,7 +37,7 @@ app.get('/:device/:state', function (req, res) {
   config[device].state = state;
   var command = config[device].msg + ' ' + state
   console.log(command);
-  res.send(state);
+  res.send("OK");
 });
 
 var server = app.listen(8080);

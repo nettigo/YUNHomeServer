@@ -40,11 +40,8 @@ void commandDecoder()
   if (node.available())
   {
     String index = node.readStringUntil(' ');
-    Console.print(F("index:"));
-    Console.println(index);
     String command = node.readStringUntil('\n');
-    Console.print(F("command:"));
-    Console.println(command);
+
     byte idx = index.toInt();
     if (idx >= MAX_DEVICES) { return; }
     if (command == F("true"))
