@@ -2,18 +2,13 @@
   "swiatlo": {
     "name": "Światło",
     "state": false,
-    "msg": "2"
+    "msg": "1"
   },
 
   "lampa": {
     "name": "Lampka",
     "state": false,
-    "msg": "3"
-  },
-
-  "telewizor": {
-    "name": "Telewizor",
-    "state": true,
-    "msg": "4"
+    "msg": "2"
   }
+
 }

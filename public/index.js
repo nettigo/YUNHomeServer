@@ -11,6 +11,11 @@ function getButtonDOM(id) {
 function getTimeRangeDOM(id) {
 	return document.querySelector('#obj-id-'+id+' .time-range');
 }
+
+function getTimeRangeLabelDOM(id) {
+	return document.querySelector('#obj-id-'+id+' .time-label span');
+}
+
 function showMessage(obj_id)
 {
 	message = document.querySelector('#message-'+obj_id);
@@ -27,7 +32,7 @@ function hideMessage(obj_id)
 
 function setTime(obj_id,time)
 {
-	timeLabel = getTimeRangeDOM(obj_id)
+	timeLabel = getTimeRangeLabelDOM(obj_id)
 	timeLabel.innerHTML = time;
 }
 
@@ -60,6 +65,7 @@ function hideTimeElapsed(obj_id)
 
 function setButtonModeOff(id)
 {
+	console.log('setButtonModeOff: '+id)
 	button = getButtonDOM(id);
 	button.value = 'Wyłącz';
 	button.className = 'off';
@@ -67,6 +73,7 @@ function setButtonModeOff(id)
 
 function setButtonModeOn(id)
 {
+	// console.log('setButtonModeOn: '+id)
 	button = getButtonDOM(id)
 	button.value = 'Włącz';
 	button.className = 'on';
@@ -106,12 +113,12 @@ function turnDeviceOn(device, time, response)
 		if (this.status == 200)
 		{
 			var status = JSON.parse(this.responseText);
-			//response(status, false);
+			response(device, status, false);
 		}
 
 		else
 		{
-			// response(null, true);
+			 response(device,null, true);
 		}
 	}
 
@@ -126,12 +133,12 @@ function turnDeviceOff(device,response)
 		if (this.status == 200)
 		{
 			var status = JSON.parse(this.responseText);
-			//response(status, false);
+			response(device, status, false);
 		}
 
 		else
 		{
-			//response(null, true);
+			response(device,null, true);
 		}
 	}
 
@@ -146,19 +153,21 @@ function getDeviceStatus(device, response)
 		if (this.status == 200)
 		{
 			var status = JSON.parse(this.responseText);
+			console.log('xhr response:' + this.responseText)
+			console.log('xhr JSON:' + status)
 			response(device, status, false);
 
 		}
 
 		else
 		{
-			//response(null, true);
+			response(device,null, true);
 			//TODO - obłsuga braku połączenia
 		}
 	};
 
 	xhr.onerror = function(e) {
-		response(null, true);
+		response(device,null, true);
 	};
 
 	xhr.send();
@@ -168,17 +177,23 @@ var pumpStatus={};
 //Jeżeli urządzenie jest włączone to zmień przycisk na 'do wyłączenia'
 function updateStatus(device, status, error)
 {
+	// console.log('UpdateSatus '+device+'/'+status+'/'+error)
+	status = status == 'true' //ETF???
 	if (error)
 	{
 		showMessage(device);
 		return;
+	} else {
+		hideMessage(device)
 	}
 
-	pumpStatus[device]=status
-	if (status) {
-		setButtonModeOff(device)
-	} else {
+	pumpStatus[device]= status
+	if (!status) {
+		// alert('true')
 		setButtonModeOn(device)
+	} else {
+		// alert('false')
+		setButtonModeOff(device)
 	}
 
 }
@@ -187,25 +202,33 @@ function toggleDeviceStatus(device)
 {
 	if (pumpStatus[device])
 	{
-		turnDeviceOff(device,updateStatus(device));
+		turnDeviceOff(device,updateStatus);
 		setModeDeviceOff(device);
 	}
 
 	else
 	{
-		var workTime = getTime(device);
+		// var workTime = getTime(device);
+		var workTime = 0
 		turnDeviceOn(device,workTime, updateStatus);
 		setModeDeviceOn(device);
-		setTimeElapsed(device,workTime);
+		// setTimeElapsed(device,workTime);
 	}
 }
 
 function init(arg) {
 	arg.forEach(function(k){
 		getDeviceStatus(k,updateStatus)
+//		setTime(k, getTime(k)) //dopasuj slider do wartości po reload
+		// getTimeRangeDOM(k).onchange = function(){
+		// 	setTime(k, getTime(k))
+		// }
+		// getTimeRangeDOM(k).oninput = function(){
+		// 	setTime(k, getTime(k))
+		// }
 		setInterval(function () {
 			getDeviceStatus(k,updateStatus);
-	}, 2000);
+		}, 2000);
 		btn = getButtonDOM(k)
 		btn.onclick = function(){toggleDeviceStatus(k)}
 	})
