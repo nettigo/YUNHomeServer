@@ -2,20 +2,21 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<link href="index.css" rel="stylesheet" media="screen">
+	<link href="/index.css" rel="stylesheet" media="screen">
 	<title>Pompa X</title>
 </head>
-<body onload="init()">
-	{% for stage in sections %}
-	<div class="content">
+<body onload="init([<% for (var d in devices) { %>'<%= d %>',<% } %>])">
+	<% for (var stage in devices) { 
+		device = devices[stage]%>
+	<div class="content" id="obj-id-<%= stage %>">
 		<div class="program-name">
-			<h1>{{ stage["descr"] }}</h1>
+			<h1><%= device.name %></h1>
 		</div>
 
-		<div id="message" class="close">Nie mogę połączyć się z pompą :(</div>
+		<div id="message-<%= stage %>" class="close message">Nie mogę połączyć się z pompą :(</div>
 
 		<div class="range">
-			<input type="range" id="time-range" value="30" min="0" max="120"/>
+			<input type="range" class="time-range" value="30" min="0" max="120"/>
 		</div>
 
 		<div class="time-label">Czas działania: <span>30</span> minut</div>
@@ -25,7 +26,7 @@
 			<input type="button" value="Włącz" class="on"/>
 		</div>
 	</div>
-	{% endfor %}
+	<% } %>
 
 <script type="text/javascript" src="index.js"></script>
 </body>

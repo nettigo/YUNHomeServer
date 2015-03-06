@@ -17,7 +17,6 @@ function readConfig()
 
 var config = readConfig();
 
-
 app.get('/', function (req, res) {
   var templatePath = path.join(__dirname, 'template.html');
   var templateSource = fs.readFileSync(templatePath, {encoding: 'utf8'});
@@ -25,10 +24,18 @@ app.get('/', function (req, res) {
   res.send(htmlSource);
 });
 
+app.get('/html', function (req, res) {
+  var templatePath = path.join(__dirname, 'templates/index.html');
+  var templateSource = fs.readFileSync(templatePath, {encoding: 'utf8'});
+  var htmlSource = ejs.render(templateSource, {devices: config});
+  res.send(htmlSource);
+});
+
+app.use(express.static(path.join(__dirname, 'public')));
 app.get('/:device', function (req, res) {
   var device = req.params.device;
   var state = config[device].state;
-  res.send(state);
+  res.send(JSON.stringify(state));
 });
 
 app.get('/:device/:state', function (req, res) {
@@ -37,7 +44,7 @@ app.get('/:device/:state', function (req, res) {
   config[device].state = state;
   var command = config[device].msg + ' ' + state
   console.log(command);
-  res.send("OK");
+  res.send(JSON.stringify(state));
 });
 
 var server = app.listen(8080);

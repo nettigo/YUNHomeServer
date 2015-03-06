@@ -1,76 +1,91 @@
-var message = document.querySelector('#message');
+// var message = document.querySelector('#message');
 //var timeRange = document.querySelector('#time-range');
 //var timeLabel = document.querySelector('.time-label span');
 //var timeElapsed = document.querySelector('.time-elapsed span');
 //var button = document.querySelector('.button input');
 
-function showMessage()
+function getButtonDOM(id) {
+	return document.querySelector('#obj-id-'+id + ' .button > input');
+}
+
+function getTimeRangeDOM(id) {
+	return document.querySelector('#obj-id-'+id+' .time-range');
+}
+function showMessage(obj_id)
 {
+	message = document.querySelector('#message-'+obj_id);
 	if (message.classList.contains('close'))
 		message.classList.remove('close');
 }
 
-function hideMessage()
+function hideMessage(obj_id)
 {
+	message = document.querySelector('#message-'+obj_id);
 	if (!message.classList.contains('close'))
 		message.classList.add('close');
 }
 
-function setTime(time)
+function setTime(obj_id,time)
 {
+	timeLabel = getTimeRangeDOM(obj_id)
 	timeLabel.innerHTML = time;
 }
 
-function getTime()
+function getTime(obj_id)
 {
-	// return parseInt(timeRange.value);
+	timeRange = getTimeRangeDOM(obj_id)
+	return parseInt(timeRange.value);
 }
 
-function setTimeElapsed(time)
+function setTimeElapsed(obj_id,time)
 {
+	timeElapsed = document.querySelector('#obj-id-'+obj_id+' .time-elapsed span');
 	timeElapsed.innerHTML = time;
 }
 
-function showTimeElapsed()
+function showTimeElapsed(obj_id)
 {
+	timeElapsed = document.querySelector('#obj-id-'+obj_id+' .time-elapsed span');
 	if (timeElapsed.parentElement.classList.contains('hide'))
 		timeElapsed.parentElement.classList.remove('hide');
 }
 
-function hideTimeElapsed()
+function hideTimeElapsed(obj_id)
 {
+	timeElapsed = document.querySelector('#obj-id-'+obj_id+' .time-elapsed span');
 	if (!timeElapsed.parentElement.classList.contains('hide'))
 		timeElapsed.parentElement.classList.add('hide');
 }
 
+
 function setButtonModeOff(id)
 {
-	button = document.querySelector('#btn-'+id + '> input');
+	button = getButtonDOM(id);
 	button.value = 'Wyłącz';
 	button.className = 'off';
 }
 
 function setButtonModeOn(id)
 {
-	button = document.querySelector('#btn-'+id+ '> input');
+	button = getButtonDOM(id)
 	button.value = 'Włącz';
 	button.className = 'on';
 }
 
-function setModePumpOn()
+function setModeDeviceOn(obj_id)
 {
-	setButtonModeOff();
-	showTimeElapsed();
+	setButtonModeOff(obj_id);
+	showTimeElapsed(obj_id);
 }
 
-function setModePumpOff()
+function setModeDeviceOff(obj_id)
 {
-	setButtonModeOn();
-	hideTimeElapsed();
+	setButtonModeOn(obj_id);
+	hideTimeElapsed(obj_id);
 }
 
  function toggleButton(id) {
- 	button = document.querySelector('#btn-'+id+ '> input');
+ 	button = getButtonDOM(id)
  	disabled = button.classList.contains('off')
  	//wyłączone? to ustaw przycisk w 'do włączenia' a urządzenie wyłącz
  	if (disabled) {
@@ -149,17 +164,17 @@ function getDeviceStatus(device, response)
 	xhr.send();
 }
 
-var pumpStatus;
+var pumpStatus={};
 //Jeżeli urządzenie jest włączone to zmień przycisk na 'do wyłączenia'
 function updateStatus(device, status, error)
 {
 	if (error)
 	{
-//		showMessage();
+		showMessage(device);
 		return;
 	}
 
-
+	pumpStatus[device]=status
 	if (status) {
 		setButtonModeOff(device)
 	} else {
@@ -168,29 +183,31 @@ function updateStatus(device, status, error)
 
 }
 
-function togglePumpStatus()
+function toggleDeviceStatus(device)
 {
-	if (!pumpStatus)
-		return;
-
-	if (pumpStatus.isPumpOn)
+	if (pumpStatus[device])
 	{
-		turnPumpOff(updateStatus);
-		setModePumpOff();
+		turnDeviceOff(device,updateStatus(device));
+		setModeDeviceOff(device);
 	}
 
 	else
 	{
-		var workTime = getTime();
-		turnPumpOn(workTime, updateStatus);
-		setModePumpOn();
-		setTimeElapsed(workTime);
+		var workTime = getTime(device);
+		turnDeviceOn(device,workTime, updateStatus);
+		setModeDeviceOn(device);
+		setTimeElapsed(device,workTime);
 	}
 }
 
 function init(arg) {
 	arg.forEach(function(k){
 		getDeviceStatus(k,updateStatus)
+		setInterval(function () {
+			getDeviceStatus(k,updateStatus);
+	}, 2000);
+		btn = getButtonDOM(k)
+		btn.onclick = function(){toggleDeviceStatus(k)}
 	})
 /*
 	getPumpStatus(updateStatus);
